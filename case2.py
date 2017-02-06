@@ -67,27 +67,12 @@ if __name__ == "__main__":
     plt.plot(quotas, case2c['9'], quotas, case2c['29'],
              quotas, case2c['49'], quotas, case2c['69'],
              quotas, case2c['89'])
-    plt.legend(["n = " + str(k) for k in sorted(int(case2c.keys()))], loc = 'lower right')
+    plt.legend(["n = " + str(k) for k in sorted([int(x) for x in case2c.keys()])], loc = 'lower right')
     plt.ylim(ymax = 1.2)
     plt.ylabel('RR', horizontalalignment = 'right', 
                rotation = 'horizontal', verticalalignment = 'top')
     plt.xlabel('q', horizontalalignment = 'right', 
                rotation = 'horizontal', verticalalignment = 'top')
     plt.savefig('Case 2c.png')
-    plt.show()
-    
-    # modified interval for consecutive quotas , Case 1a
-    case2d = Case2(p = 0.8, kneg = 4, qnum = 10)
-    quotas = np.linspace(0, 1, 11)
-    plt.plot(quotas, case2d['9'], quotas, case2d['29'],
-             quotas, case2d['49'], quotas, case2d['69'],
-             quotas, case2d['89'])
-    plt.legend(["n = " + str(k) for k in sorted(int(case2d.keys()))], loc = 'lower right')
-    plt.ylim(ymax = 1.2)
-    plt.ylabel('RR', horizontalalignment = 'right', 
-               rotation = 'horizontal', verticalalignment = 'top')
-    plt.xlabel('q', horizontalalignment = 'right', 
-               rotation = 'horizontal', verticalalignment = 'top')
-    plt.savefig('Case 2d.png')
     plt.show()
     

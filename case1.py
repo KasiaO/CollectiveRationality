@@ -21,7 +21,7 @@ import matplotlib.pyplot as plt
 # qnum - int - how many quotas on the interval 0 to 1 to consider
 
 # Case1a, replication of previous study
-def Case1(t = 10000, n = 10, m = 4, l = 1, k = 4, kneg = 0, 
+def Case1(t = 5000, n = 10, m = 4, l = 1, k = 4, kneg = 0, 
            p = np.linspace(0.5, 1, 6), qnum = 11):
     res = {}
     for prob in p:
@@ -46,22 +46,22 @@ if __name__ == "__main__":
     plt.savefig('Case 1a.png')
     plt.show()
     
-    # modified interval for consecutive quotas , Case 1a
-    case1a_v2 = Case1(qnum = 10)
-    quotas = np.linspace(0, 1, 10)
-    plt.plot(quotas, case1a_v2['0.5'], quotas, case1a_v2['0.6'],
-             quotas, case1a_v2['0.7'], quotas, case1a_v2['0.8'],
-             quotas, case1a_v2['0.9'], quotas, case1a_v2['1.0'])
-    plt.legend(["p = " + k for k in sorted(case1a_v2.keys())], loc = 'lower left')
-    plt.ylim(ymax = 1.2)
-    plt.ylabel('RR', horizontalalignment = 'right', 
-               rotation = 'horizontal', verticalalignment = 'top')
-    plt.xlabel('q', horizontalalignment = 'right', 
-               rotation = 'horizontal', verticalalignment = 'top')
-    plt.savefig('Case 1a v2.png')
-    plt.show()
-    
-    # Case 1b: all literals in the constraint are negated
+#    # modified interval for consecutive quotas , Case 1a
+#    case1a_v2 = Case1(qnum = 10)
+#    quotas = np.linspace(0, 1, 10)
+#    plt.plot(quotas, case1a_v2['0.5'], quotas, case1a_v2['0.6'],
+#             quotas, case1a_v2['0.7'], quotas, case1a_v2['0.8'],
+#             quotas, case1a_v2['0.9'], quotas, case1a_v2['1.0'])
+#    plt.legend(["p = " + k for k in sorted(case1a_v2.keys())], loc = 'lower left')
+#    plt.ylim(ymax = 1.2)
+#    plt.ylabel('RR', horizontalalignment = 'right', 
+#               rotation = 'horizontal', verticalalignment = 'top')
+#    plt.xlabel('q', horizontalalignment = 'right', 
+#               rotation = 'horizontal', verticalalignment = 'top')
+#    plt.savefig('Case 1a v2.png')
+#    plt.show()
+#    
+#    # Case 1b: all literals in the constraint are negated
     # direct replication of the previous study, Case 1b
     case1b = Case1(kneg = 4)
     quotas = np.linspace(0, 1, 11)
@@ -76,19 +76,19 @@ if __name__ == "__main__":
                rotation = 'horizontal', verticalalignment = 'top')
     plt.savefig('Case 1b.png')
     plt.show()
-    
-    # modified interval for consecutive quotas , Case 1b
-    case1b_v2 = Case1(kneg = 4, qnum = 10)
-    quotas = np.linspace(0, 1, 10)
-    plt.plot(quotas, case1b_v2['0.5'], quotas, case1b_v2['0.6'],
-             quotas, case1b_v2['0.7'], quotas, case1b_v2['0.8'],
-             quotas, case1b_v2['0.9'], quotas, case1b_v2['1.0'])
-    plt.legend(["p = " + k for k in sorted(case1b_v2.keys())], loc = 'lower right')
-    plt.ylim(ymax = 1.2)
-    plt.ylabel('RR', horizontalalignment = 'right', 
-               rotation = 'horizontal', verticalalignment = 'top')
-    plt.xlabel('q', horizontalalignment = 'right', 
-               rotation = 'horizontal', verticalalignment = 'top')
-    plt.savefig('Case 1b v2.png')
-    plt.show()
+#    
+#    # modified interval for consecutive quotas , Case 1b
+#    case1b_v2 = Case1(kneg = 4, qnum = 10)
+#    quotas = np.linspace(0, 1, 10)
+#    plt.plot(quotas, case1b_v2['0.5'], quotas, case1b_v2['0.6'],
+#             quotas, case1b_v2['0.7'], quotas, case1b_v2['0.8'],
+#             quotas, case1b_v2['0.9'], quotas, case1b_v2['1.0'])
+#    plt.legend(["p = " + k for k in sorted(case1b_v2.keys())], loc = 'lower right')
+#    plt.ylim(ymax = 1.2)
+#    plt.ylabel('RR', horizontalalignment = 'right', 
+#               rotation = 'horizontal', verticalalignment = 'top')
+#    plt.xlabel('q', horizontalalignment = 'right', 
+#               rotation = 'horizontal', verticalalignment = 'top')
+#    plt.savefig('Case 1b v2.png')
+#    plt.show()
     

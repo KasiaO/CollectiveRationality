@@ -144,7 +144,7 @@ class Model:
         noAgents = len(ballots)
         for issue in range(noIssues):
             decision.append(sum([x.getVote(str(issue)) for x in ballots]))
-            if decision[issue] >= math.ceil(q * noAgents):
+            if decision[issue] >= math.ceil(round(q, 2) * noAgents):
                 decision[issue] = True
             else:
                 decision[issue] = False
@@ -163,22 +163,22 @@ def model(n, m, l, k, kneg, p, qnum):
     constraint = Constraint(m, l, k, kneg)
     scenario = Scenario(m)
     model = Model(scenario, m, constraint)
-    ref = model.drawBallotRef()
-    ballots = model.drawBallots(ref, n, p)
-    rationality = []
-    for q in np.linspace(0, 1, qnum):
-        decision = model.groupDecision(ballots, q)
-        isRational = model.validateDecision(decision)
-        rationality.append(isRational)
-    return(rationality)
+    return(model)
 
 
 def runExperiment(t, n, m, l, k, kneg, p, qnum):
     results = [[] for _ in range(qnum)]
+    mod = model(n, m, l, k, kneg, p, qnum)
     for _ in range(t):
-        run = model(n, m, l, k, kneg, p, qnum)
+        ref = mod.drawBallotRef()
+        ballots = mod.drawBallots(ref, n, p)
+        rationality = []
+        for q in np.linspace(0, 1, qnum):
+            decision = mod.groupDecision(ballots, q)
+            isRational = mod.validateDecision(decision)
+            rationality.append(isRational)
         for i in range(qnum):
-            results[i].append(run[i])
+            results[i].append(rationality[i])
     RR = [np.mean(q) for q in results]
     return(RR)
     
@@ -190,22 +190,22 @@ def runExperiment(t, n, m, l, k, kneg, p, qnum):
 
 #c = Constraint(2, 1, 2, 0)
 #s = Scenario(2)
-#m = Model(s, 10, c)
+#m = Model(s, 2, c)
 #ref = m.drawBallotRef()
 ##print(ref.getNoIssues())
 ##print(ref.getVote('3'))
-#bs = m.drawBallots(ref, 10, 1)
+#bs = m.drawBallots(ref, 10, 0.7)
 #m.printBallots(bs)
-#dec = m.groupDecision(bs, 0)
-#dec.printBallot()
-#print(c.checkRationality(dec))
+##dec = m.groupDecision(bs, 0)
+##dec.printBallot()
+##print(c.checkRationality(dec))
 #dec1 = m.groupDecision(bs, 0.7)
 #dec1.printBallot()
 #print(c.checkRationality(dec1))
 #dec2 = m.groupDecision(bs, 0.8)
 #dec2.printBallot()
 #print(c.checkRationality(dec2))
-#rat = m.validateDecision(dec, c)
+##rat = m.validateDecision(dec)
 #print(len(bs))
 #print('####ref')
 #print([x.getChoice() for x in ref.votes])
@@ -235,7 +235,7 @@ def runExperiment(t, n, m, l, k, kneg, p, qnum):
 
 #results = [[] for _ in range(11)]
 #for _ in range(5):
-#    run = model(6, 4, 1, 4, 0, 0.7)
+#    run = model(6, 4, 1, 4, 0, 0.7, 10)
 #    print("###run")
 #    print(run)
 #    for i in range(11):

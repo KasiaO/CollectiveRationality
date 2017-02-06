@@ -21,7 +21,7 @@ import matplotlib.pyplot as plt
 # qnum - int - how many quotas on the interval 0 to 1 to consider
 
 # Case3, replication of previous study
-def Case3(t = 10000, n = 10, m = 4, l = 2, k = 2, kneg = [0, 1, 2], 
+def Case3(t = 5000, n = 10, m = 4, l = 2, k = 2, kneg = [0, 1, 2], 
            p = 0.5, qnum = 11):
     res = {}
     for kNeg in kneg:
