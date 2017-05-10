@@ -3,8 +3,6 @@ import numpy as np
 import math
 
 # basic module: common classes, methods, functions
-# based on the replicated study
-
 class Issue:
     
     def __init__(self, index):
@@ -52,7 +50,6 @@ class Ballot:
         return(not self.getVote(index))
         
     def calcHammDist(self, ballotRef):
-        # calculate Hamming distance
         dist = 0
         for i in range(len(self.votes)):
             if self.getVote(str(i)) != ballotRef.getVote(str(i)):
@@ -100,7 +97,7 @@ class Constraint:
             print(clause)
             raise
      
-class ConstraintCustom(Constraint):   
+class ConstraintDNF(Constraint):
     # constraint uses DNF instead of CNF
     def __init__(self, constraint):
         self.constraint = constraint
@@ -178,24 +175,22 @@ class Model:
             b.printBallot()
     
     def validateDecEpistem(self, decision, ref):
-        return(ref.getNoIssues()-decision.calcHammDist(ref))
+        return(decision.calcHammDist(ref) == 0)
 
         
 def model(m, l, k, kneg):
-    # generate constraint
     constraint = Constraint(m, l, k, kneg)
     scenario = Scenario(m)
     model = Model(scenario, m, constraint)
     return(model)
 
-def modelCustom(m, constraint):
-    # generate constraint
-    constraint = ConstraintCustom(constraint)
+def modelDNF(m, constraint):
+    constraint = ConstraintDNF(constraint)
     scenario = Scenario(m)
-    model = Model(scenario, m, constraint)
-    return(model)
+    modelDNF = Model(scenario, m, constraint)
+    return(modelDNF)
 
-
+# basic version of rationality experiment
 def runExperiment(t, n, m, l, k, kneg, p, qnum):
     results = [[] for _ in range(qnum)]
     mod = model(m, l, k, kneg)
@@ -212,11 +207,10 @@ def runExperiment(t, n, m, l, k, kneg, p, qnum):
     RR = [np.mean(q) for q in results]
     return(RR)
 
-
 # runExperiment for epistemic analysis
 def runExperimentEpi(t, n, m, l, k, kneg, p, qnum):
     results = [[] for _ in range(qnum)]
-    mod = model(n, m, l, k, kneg, p, qnum)
+    mod = model(m, l, k, kneg)
     for _ in range(t):
         ref = mod.drawBallotRef()
         ballots = mod.drawBallots(ref, n, p)
@@ -228,15 +222,36 @@ def runExperimentEpi(t, n, m, l, k, kneg, p, qnum):
         for i in range(qnum):
             results[i].append(truth[i])
     TR = [np.mean(q) for q in results]
-    return(TR)  
+    return(TR) 
 
-# run experiment with custom constraint
-def runExperimentCustom(t, n, m, constraint, p, qnum):
-    results = [[] for _ in range(qnum)]
-    mod = modelCustom(m, constraint)
+# runExperiment for epistemic analysis with SP for comparison
+def runExperimentEpiSP(t, n, m, l, k, kneg, p, qnum):
+    results = [[] for _ in range(qnum+1)]
+    mod = model(m, l, k, kneg)
     for _ in range(t):
         ref = mod.drawBallotRef()
         ballots = mod.drawBallots(ref, n, p)
+        effective = socialPlanner(mod, ballots, p)
+        truth = []
+        for q in np.linspace(0, 1, qnum):
+            decision = mod.groupDecision(ballots, q)
+            isTrue = mod.validateDecEpistem(decision, ref)
+            truth.append(isTrue)
+        for i in range(qnum):
+            results[i+1].append(truth[i])
+        results[0].append(mod.validateDecEpistem(effective, ref))
+    TR = [np.mean(q) for q in results]
+    return(TR)  
+
+# run experiment with DNF constraint
+def runExperimentDNF(t, m, constraint, prob, qnum):
+    results = [[] for _ in range(qnum)]
+    mod = modelDNF(m, constraint)
+    for _ in range(t):
+        ref = mod.drawBallotRef()
+        ballots = []
+        for p in prob:
+            ballots.append(mod.drawBallots(ref, 1, p)[0])
         rationality = []
         for q in np.linspace(0, 1, qnum):
             decision = mod.groupDecision(ballots, q)
@@ -247,7 +262,26 @@ def runExperimentCustom(t, n, m, constraint, p, qnum):
     RR = [np.mean(q) for q in results]
     return(RR)
 
-# override runExperiment for varying probability
+# runExperiment for varying probability and DNF
+def runExperimentProbEpiDNF(t, m, constraint, prob, qnum):
+    results = [[] for _ in range(qnum)]
+    mod = modelDNF(m, constraint)
+    for _ in range(t):
+        ref = mod.drawBallotRef()
+        ballots = []
+        for p in prob:
+            ballots.append(mod.drawBallots(ref, 1, p)[0])
+        truth = []
+        for q in np.linspace(0, 1, qnum):
+            decision = mod.groupDecision(ballots, q)
+            isTrue = mod.validateDecEpistem(decision, ref)
+            truth.append(isTrue)
+        for i in range(qnum):
+            results[i].append(truth[i])
+    TR = [np.mean(q) for q in results]
+    return(TR)
+
+# runExperiment for varying probability
 def runExperimentProb(t, n, m, l, k, kneg, prob, qnum):
     results = [[] for _ in range(qnum)]
     mod = model(m, l, k, kneg)
@@ -266,15 +300,66 @@ def runExperimentProb(t, n, m, l, k, kneg, prob, qnum):
     RR = [np.mean(q) for q in results]
     return(RR)
 
-# auxiliary function for aggregating results for different constraints
+# runExperiment for epistemic analysis and varying probability (proportionally)
+def runExperimentProbEpi(t, n, m, l, k, kneg, prob, prop, qnum):
+    results = [[] for _ in range(qnum)]
+    mod = model(m, l, k, kneg)
+    for _ in range(t):
+        ref = mod.drawBallotRef()
+        ballots = []
+        for i in range(len(prob)):
+            n_part = round(n*prop[i])
+            p = prob[i]
+            if(n_part):
+                ballots.extend(mod.drawBallots(ref, n_part, p))
+        truth = []
+        for q in np.linspace(0, 1, qnum):
+            decision = mod.groupDecision(ballots, q)
+            isTrue = mod.validateDecEpistem(decision, ref)
+            truth.append(isTrue)
+        for i in range(qnum):
+            results[i].append(truth[i])
+    TR = [np.mean(q) for q in results]
+    return(TR)
+
+# auxiliary function for aggregating results
+#def aggRes(RR):
+#    agg = []
+#    stdev = []
+#    lower = []
+#    upper = []
+#    for i in range(len(RR[0])):
+#        agg.append(np.mean([r[i] for r in RR]))
+#        stdev.append(np.std([r[i] for r in RR]))
+#        lower.append(np.percentile([r[i] for r in RR], 5))
+#        upper.append(np.percentile([r[i] for r in RR], 95))
+#    return((agg, stdev, lower, upper))
+
 def aggRes(RR):
     agg = []
     stdev = []
-    lower = []
-    upper = []
+    raw = []
     for i in range(len(RR[0])):
         agg.append(np.mean([r[i] for r in RR]))
         stdev.append(np.std([r[i] for r in RR]))
-        lower.append(np.percentile([r[i] for r in RR], 5))
-        upper.append(np.percentile([r[i] for r in RR], 95))
-    return((agg, stdev, lower, upper))
+        raw.append([r[i] for r in RR])
+    return((agg, stdev, raw))
+
+# social planner
+def bayesProb(model, ref, ballots, p):
+    probs = [model.calculateProb(b.calcHammDist(ref), p, ref)\
+             for b in ballots]
+    return(np.prod(probs))
+       
+def socialPlanner(model, ballots, p):
+    allRat = model.mod
+    best = None
+    high = 0
+    for ref in allRat:
+        prob = bayesProb(model, ref, ballots, p)
+        if(prob >= high):
+            best = ref
+            high = prob
+    return(best)
+        
+    

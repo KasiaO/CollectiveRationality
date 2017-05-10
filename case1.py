@@ -2,7 +2,6 @@
 import numpy as np
 import base
 import matplotlib.pyplot as plt
-import time
 
 # parameters to be set
 # t - int - number of runs of the simulation
@@ -25,15 +24,15 @@ def Case1(t = 5000, n = 10, m = 4, l = 1, k = 4, kneg = 0,
 
 if __name__ == "__main__":   
     # Case 1a, only positive literals in the constraint
-    start = time.time()
     case1a = Case1()
-    end = time.time()
-    print("The simulation took " + str(end - start) + " s to finish.")
     quotas = np.linspace(0, 1, 11)
     plt.plot(quotas, case1a['0.5'], quotas, case1a['0.6'],
              quotas, case1a['0.7'], quotas, case1a['0.8'],
              quotas, case1a['0.9'], quotas, case1a['1.0'])
-    plt.legend(["$\pi$ = " + k for k in sorted(case1a.keys())], loc = 'lower left')
+    plt.legend(["$\pi$ = " + k for k in sorted(case1a.keys())], 
+                loc = 'upper center', 
+                bbox_to_anchor = (0.5, 1.15), ncol = 3, 
+                fancybox = True)
     plt.ylim(ymax = 1.2)
     plt.ylabel('RR', horizontalalignment = 'right', 
                rotation = 'horizontal', verticalalignment = 'top')
@@ -44,15 +43,15 @@ if __name__ == "__main__":
     plt.show()
      
     # Case 1b: only negative literals in the constraint
-    start2 = time.time()
     case1b = Case1(kneg = 4)
-    end2 = time.time()
-    print("The simulation took " + str(end2 - start2) + " s to finish.")
     quotas = np.linspace(0, 1, 11)
     plt.plot(quotas, case1b['0.5'], quotas, case1b['0.6'],
              quotas, case1b['0.7'], quotas, case1b['0.8'],
              quotas, case1b['0.9'], quotas, case1b['1.0'])
-    plt.legend(["$\pi$ = " + k for k in sorted(case1b.keys())], loc = 'lower right')
+    plt.legend(["$\pi$ = " + k for k in sorted(case1b.keys())], 
+                loc = 'upper center', 
+                bbox_to_anchor = (0.5, 1.15), ncol = 3, 
+                fancybox = True)
     plt.ylim(ymax = 1.2)
     plt.ylabel('RR', horizontalalignment = 'right', 
                rotation = 'horizontal', verticalalignment = 'top')

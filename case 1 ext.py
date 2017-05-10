@@ -28,7 +28,9 @@ if __name__ == "__main__":
     case1ext = Case1ext()
     quotas = np.linspace(0, 1, 11)
     plt.errorbar(x = quotas, y = case1ext[0], yerr = case1ext[1])
-    plt.legend(["$\pi$ = 0.5"], loc = 'lower left')
+    plt.legend(["$\pi$ = 0.5"], loc = 'upper center', 
+                bbox_to_anchor = (0.5, 1.15), ncol = 1, 
+                fancybox = True)
     plt.ylim(ymax = 1.2)
     plt.ylabel('RR', horizontalalignment = 'right', 
                rotation = 'horizontal', verticalalignment = 'top')
@@ -40,7 +42,9 @@ if __name__ == "__main__":
     
     case2ext = Case1ext(p = 0.8)
     plt.errorbar(x = quotas, y = case2ext[0], yerr = case2ext[1])
-    plt.legend(["$\pi$ = 0.8"], loc = 'lower left')
+    plt.legend(["$\pi$ = 0.8"], loc = 'upper center', 
+                bbox_to_anchor = (0.5, 1.15), ncol = 1, 
+                fancybox = True)
     plt.ylim(ymax = 1.2)
     plt.ylabel('RR', horizontalalignment = 'right', 
                rotation = 'horizontal', verticalalignment = 'top')
@@ -52,7 +56,9 @@ if __name__ == "__main__":
     
     # 5-95 confidence intervals
     plt.plot(quotas, case1ext[0], '-', quotas, case1ext[2], '--', quotas, case1ext[3], '--')
-    plt.legend(["Mean", "Lower bound", "Upper bound"], loc = 'lower left')
+    plt.legend(["Mean", "Lower bound", "Upper bound"], loc = 'upper center', 
+                bbox_to_anchor = (0.5, 1.15), ncol = 3, 
+                fancybox = True)
     plt.ylim(ymax = 1.2)
     plt.ylabel('RR', horizontalalignment = 'right', 
                rotation = 'horizontal', verticalalignment = 'top')
@@ -63,7 +69,9 @@ if __name__ == "__main__":
     plt.show()
     
     plt.plot(quotas, case2ext[0], '-', quotas, case2ext[2], '--', quotas, case2ext[3], '--')
-    plt.legend(["Mean", "Lower bound", "Upper bound"], loc = 'lower left')
+    plt.legend(["Mean", "Lower bound", "Upper bound"], loc = 'upper center', 
+                bbox_to_anchor = (0.5, 1.15), ncol = 3, 
+                fancybox = True)
     plt.ylim(ymax = 1.2)
     plt.ylabel('RR', horizontalalignment = 'right', 
                rotation = 'horizontal', verticalalignment = 'top')
@@ -76,7 +84,9 @@ if __name__ == "__main__":
     # Case 1b, negative literals in the constraint
     case3ext = Case1ext(kneg = 4)
     plt.errorbar(x = quotas, y = case3ext[0], yerr = case3ext[1])
-    plt.legend(["$\pi$ = 0.5"], loc = 'lower left')
+    plt.legend(["$\pi$ = 0.5"], loc = 'upper center', 
+                bbox_to_anchor = (0.5, 1.15), ncol = 1, 
+                fancybox = True)
     plt.ylim(ymax = 1.2)
     plt.ylabel('RR', horizontalalignment = 'right', 
                rotation = 'horizontal', verticalalignment = 'top')
@@ -88,7 +98,9 @@ if __name__ == "__main__":
     
     case4ext = Case1ext(p = 0.8, kneg = 4)
     plt.errorbar(x = quotas, y = case4ext[0], yerr = case4ext[1])
-    plt.legend(["$\pi$ = 0.8"], loc = 'lower left')
+    plt.legend(["$\pi$ = 0.8"], loc = 'upper center', 
+                bbox_to_anchor = (0.5, 1.15), ncol = 1, 
+                fancybox = True)
     plt.ylim(ymax = 1.2)
     plt.ylabel('RR', horizontalalignment = 'right', 
                rotation = 'horizontal', verticalalignment = 'top')
@@ -100,7 +112,9 @@ if __name__ == "__main__":
     
     # 5-95 confidence intervals
     plt.plot(quotas, case3ext[0], '-', quotas, case3ext[2], '--', quotas, case3ext[3], '--')
-    plt.legend(["Mean", "Lower bound", "Upper bound"], loc = 'lower left')
+    plt.legend(["Mean", "Lower bound", "Upper bound"], loc = 'upper center', 
+                bbox_to_anchor = (0.5, 1.15), ncol = 3, 
+                fancybox = True)
     plt.ylim(ymax = 1.2)
     plt.ylabel('RR', horizontalalignment = 'right', 
                rotation = 'horizontal', verticalalignment = 'top')
@@ -111,7 +125,9 @@ if __name__ == "__main__":
     plt.show()
     
     plt.plot(quotas, case4ext[0], '-', quotas, case4ext[2], '--', quotas, case4ext[3], '--')
-    plt.legend(["Mean", "Lower bound", "Upper bound"], loc = 'lower left')
+    plt.legend(["Mean", "Lower bound", "Upper bound"], loc = 'upper center', 
+                bbox_to_anchor = (0.5, 1.15), ncol = 3, 
+                fancybox = True)
     plt.ylim(ymax = 1.2)
     plt.ylabel('RR', horizontalalignment = 'right', 
                rotation = 'horizontal', verticalalignment = 'top')

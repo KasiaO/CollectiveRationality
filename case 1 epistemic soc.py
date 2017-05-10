@@ -14,23 +14,18 @@ import matplotlib.pyplot as plt
 # qnum - int - how many quotas on the interval 0 to 1 to consider
 
 # Case1a, replication of previous study
-def Case1(t = 5000, n = 10, m = 4, l = 1, k = 4, kneg = 0, 
-           p = np.linspace(0.5, 1, 6), qnum = 11):
-    res = {}
-    for prob in p:
-        exp = base.runExperimentEpi(t, n, m, l, k, kneg, prob, qnum)
-        res[str(prob)] = exp
-    return(res)
+def Case1epi_ext(t = 5000, n = 10, m = 4, l = 1, k = 4, kneg = 0, 
+           p = 0.5, qnum = 11):
+    exp = base.runExperimentEpiSP(t, n, m, l, k, kneg, p, qnum)
+    return(exp)
 
 if __name__ == "__main__":   
     # Case 1a, no negated literals in the constraint
     # direct replication of the previous study, Case 1a
-    case1a = Case1()
+    case1a = Case1epi_ext()
     quotas = np.linspace(0, 1, 11)
-    plt.plot(quotas, case1a['0.5'], quotas, case1a['0.6'],
-             quotas, case1a['0.7'], quotas, case1a['0.8'],
-             quotas, case1a['0.9'], quotas, case1a['1.0'])
-    plt.legend([r'$\pi = ' + k + '$' for k in sorted(case1a.keys())], 
+    plt.plot(quotas, case1a[1:], quotas, case1a[:1]*11)
+    plt.legend([r'voters $\pi = 0.5$', 'SP $\pi = 0.5$'], 
                 loc = 'upper center', 
                 bbox_to_anchor = (0.5, 1.15), ncol = 3, 
                 fancybox = True)
@@ -40,17 +35,15 @@ if __name__ == "__main__":
     plt.xlabel('q', horizontalalignment = 'right', 
                rotation = 'horizontal', verticalalignment = 'top')
     plt.grid(b = True, which = 'both', color = '0.65', linestyle = '-')
-    plt.savefig('Case 1a epistemic.png')
+    plt.savefig('Case 1a epistemic soc 05.png')
     plt.show()
      
 #    # Case 1b: all literals in the constraint are negated
     # direct replication of the previous study, Case 1b
-    case1b = Case1(kneg = 4)
+    case1b = Case1epi_ext(p = 0.8)
     quotas = np.linspace(0, 1, 11)
-    plt.plot(quotas, case1b['0.5'], quotas, case1b['0.6'],
-             quotas, case1b['0.7'], quotas, case1b['0.8'],
-             quotas, case1b['0.9'], quotas, case1b['1.0'])
-    plt.legend([r'$\pi = ' + k + '$' for k in sorted(case1b.keys())], 
+    plt.plot(quotas, case1b[1:], quotas, case1b[:1]*11)
+    plt.legend([r'voters $\pi = 0.8$', 'SP $\pi = 0.8$'], 
                 loc = 'upper center', 
                 bbox_to_anchor = (0.5, 1.15), ncol = 3, 
                 fancybox = True)
@@ -60,5 +53,6 @@ if __name__ == "__main__":
     plt.xlabel('q', horizontalalignment = 'right', 
                rotation = 'horizontal', verticalalignment = 'top')
     plt.grid(b = True, which = 'both', color = '0.65', linestyle = '-')
-    plt.savefig('Case 1b epistemic.png')
+    plt.savefig('Case 1a epistemic soc 08.png')
     plt.show()
+
